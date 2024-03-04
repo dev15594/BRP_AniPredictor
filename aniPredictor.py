@@ -82,22 +82,17 @@ class AniPredictor():
             log.update({"GPU Available for Classification : " : gpu_name})
             # log.update({"CPU" : cpu})
             num_images = 0
-            # len(os.listdir(data_dir))
-            for _,_,files in os.walk(data_dir):
-                num_images += len(files) 
-            # for root,dirs,files in os.walk(data_dir):
-            #     if not root == "Cropped_images":
-            #         num_images += len(files)
-            #         for f in files:
-            #             if not f.endswith(".jpg"):
-            #                 num_images -= 1
+            files = os.listdir(data_dir)
+            for f in files:
+                if f.lower().endswith(".jpg"):
+                    num_images += 1
             log.update({"Num images" : num_images})
             print(num_images)
             
             ## RUN MEGADETECTOR AND CREATE DETECTIONS.DF
             
             megadetector_start = time.time()
-            json_dir, megadetector_log = megadetector(data_dir)
+            json_dir, megadetector_log = megadetector(data_dir, num_images)
             if not megadetector_log == {}:
                 log.update(megadetector_log)
             else:
@@ -126,6 +121,7 @@ class AniPredictor():
                     print(f"Cropping exception occured")
             else:
                 print("Images already cropped...")
+                
             cropping_end = time.time()
             cropping_time = str(timedelta(seconds=round(cropping_end - cropping_start)))
             log.update({"Cropping Time" : cropping_time})
@@ -184,7 +180,7 @@ class AniPredictor():
         
             ## UNGULATES PREDICT
 
-            if os.path.exists(os.path.join(cropped_dir,r"Ungulate")):
+            if os.path.exists(os.path.join(cropped_dir,r"Ungulate")) and len(os.listdir(os.path.join(cropped_dir,r"Ungulate"))) > 0:
                 ungulate_start = time.time()
                 print("Predicting Ungulates...")
                 df_ungulate, num_ungulates = predict_lower_level_species(cropped_dir, 
