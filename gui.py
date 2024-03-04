@@ -222,16 +222,21 @@ class App(customtkinter.CTk):
 
         # Copy and Rename 
         if copyAndRename:
-            print("Copying and Renaming Files")
+            print("Skipping Copying and Renaming")
             copyObj = RenameAndCopy(dest_dir=dst_path, camera=camera, station=station)
             self.unique_directories = copyObj.run(input_dir=src_path)
+        else:
+            print("No image copying required")
+            dst_path = src_path ### Added by varun 04-03-2024
         
         # Geotag Images
         if geotag:
             print("Geotagging Images...")
             geotagObj = Geotag(lat=lat, long=long)
             geotagObj.run(self.unique_directories)
-        
+        else:
+            print("Skipping Geotagging")
+            
         # Run Model
         run_model = 1
         if run_model:

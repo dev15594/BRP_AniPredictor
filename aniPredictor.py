@@ -1,76 +1,10 @@
 from dependencies import *
 from aniPred_helper import *
+from Megadetector import *
 
 class AniPredictor():
     def __init__(self, dest_dir) -> None:
         self.dest_dir = dest_dir
-
-    def megadetector(self, img_dir):
-        print("Megadetector model")
-        log = {}
-        local_detector_path = os.path.join(os.getcwd(), r"cameratraps\\detection\\run_detector_batch.py")
-        megadetector_path = os.path.join(os.getcwd(), "md_v5a.0.0.pt")
-        output_file_name = "_".join(img_dir.split("\\")[-3:])
-        json_dir = os.path.join(img_dir, f"{output_file_name}_megadetector.json")
-
-        if os.path.exists(json_dir):
-            print("Megadetector output file already exists.. Going for species classification")
-            log_dir = os.path.join(img_dir, f"{output_file_name}_log.json")
-            if os.path.exists(log_dir):
-                with open(log_dir, 'r') as f:
-                    log = json.load(f)
-            return json_dir, log
-        
-        print(f"Saving detections at {json_dir}...")
-        
-        command = [sys.executable,
-                local_detector_path,
-                megadetector_path,
-                img_dir,
-                json_dir,
-                "--recursive"]
-        
-        prev_percentage = 0
-        with Popen(command,
-                stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, shell=True,
-                universal_newlines=True) as p:
-            for line in p.stdout:
-                if line.startswith("Loaded model in"):
-                    print(line)
-                
-                elif "%" in line[0:4]:
-                    percentage = re.search("\d*%", line[0:4])[0][:-1]
-                    if percentage > prev_percentage:
-                        prev_percentage = percentage
-                        print(percentage)
-                    
-
-        # command = [sys.executable,
-        #             local_detector_path,
-        #             megadetector_path,
-        #             img_dir,
-        #             json_dir]
-        
-        # # with tqdm(total = min(100, num_images)) as t:
-        # prev_percentage = 0
-        # with Popen(command,
-        #         stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, shell=True,
-        #         universal_newlines=True) as p:
-        #     for line in p.stdout:
-                
-        #         if line.startswith("Loaded model in"):
-        #             print(line)
-                
-        #         elif "%" in line[0:4]:
-        #             percentage = int(re.search("\d*%", line[0:4])[0][:-1])
-        #             if percentage > prev_percentage:
-        #                 prev_percentage = percentage
-        #                 print(percentage)
-                        # t.update(1)
-    
-        print("Bounding Boxes Created")
-
-        return json_dir, log
 
     def run(self):
         try:
@@ -163,7 +97,7 @@ class AniPredictor():
             ## RUN MEGADETECTOR AND CREATE DETECTIONS.DF
             
             megadetector_start = time.time()
-            json_dir, megadetector_log = self.megadetector(data_dir)
+            json_dir, megadetector_log = megadetector(data_dir)
             if not megadetector_log == {}:
                 log.update(megadetector_log)
             else:
