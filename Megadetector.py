@@ -14,32 +14,32 @@ def megadetector(img_dir, num_images):
         if os.path.exists(log_dir):
             with open(log_dir, 'r') as f:
                 log = json.load(f)
-    return json_dir, log
-    print(f"Saving detections at {json_dir}...")   
-                    
-    command = [sys.executable,
-               local_detector_path,
-               megadetector_path,
-               img_dir,
-               json_dir]
-       
-    print(f"Detecting objects in {num_images} images...")
+        print(f"Saving detections at {json_dir}...")           
     
-    with tqdm(total = 100) as t:
-        prev_percentage = 0
-        with Popen(command,
-                stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, shell=True,
-                universal_newlines=True) as p:
-            for line in p.stdout:
-                
-                if line.startswith("Loaded model in"):
-                    pass
-                
-                elif "%" in line[0:4]:
-                    percentage = int(re.search("\d*%", line[0:4])[0][:-1])
-                    if percentage > prev_percentage:
-                        prev_percentage = percentage
-                        t.update(1)
-                        
-    print("Bounding Boxes Created")
+    else:                
+        command = [sys.executable,
+                   local_detector_path,
+                   megadetector_path,
+                   img_dir,
+                   json_dir]
+           
+        print(f"Detecting objects in {num_images} images...")
+        
+        with tqdm(total = 100) as t:
+            prev_percentage = 0
+            with Popen(command,
+                    stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, shell=True,
+                    universal_newlines=True) as p:
+                for line in p.stdout:
+                    
+                    if line.startswith("Loaded model in"):
+                        pass
+                    
+                    elif "%" in line[0:4]:
+                        percentage = int(re.search("\d*%", line[0:4])[0][:-1])
+                        if percentage > prev_percentage:
+                            prev_percentage = percentage
+                            t.update(1)
+                            
+        print("Bounding Boxes Created")
     return json_dir, log
