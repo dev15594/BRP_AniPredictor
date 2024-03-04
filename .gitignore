@@ -1,0 +1,12 @@
+
+ai4eutils/
+cameratraps/
+md_v5a.0.0.pt
+*.png
+Models/Efficient_Net_Small_Carnivores_1.ckpt/keras_metadata.pb
+*.pb
+Models/Efficient_Net_Small_Carnivores_1.ckpt/variables/variables.data-00000-of-00001
+*.index
+*.data-00000-of-00001
+*.JPG
+yolov5/
