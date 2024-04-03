@@ -282,17 +282,28 @@ def predict_lower_level_species(cropped_dir, folder, class_names, model, level):
     num_images = len(preds)
     pred_classes = []
     pred_probs=[]
-    
-    for pred in preds:
-        if max(pred) >= 0.8:
-            species = class_names[np.argmax(pred)]
-        else:
-            if level == "Species":
-                species = folder[:-2]
+    if level == "Custom":
+        for pred in preds:
+            if pred >= 0.6:
+                species = "Animal"
             else:
                 species = "Others"
-        pred_classes.append(species)
-        pred_probs.append(max(pred))
+                
+            pred_classes.append(species)
+            pred_probs.append(max(pred))
+            
+
+    else:
+        for pred in preds:
+            if max(pred) >= 0.8:
+                species = class_names[np.argmax(pred)]
+            else:
+                if level == "Species":
+                    species = folder[:-2]
+                else:
+                    species = "Others"
+            pred_classes.append(species)
+            pred_probs.append(max(pred))
     
     if level == "Species":
         new_df = pd.DataFrame({
