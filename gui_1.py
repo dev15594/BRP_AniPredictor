@@ -302,6 +302,7 @@ class App(customtkinter.CTk):
                 pass
         else:
             print("No GPUs available.")
+            gpu_name = "No GPU"
             self.log_msg += "GPU Not Available \n"
             self.print_log()
 
