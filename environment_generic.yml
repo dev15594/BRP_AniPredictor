@@ -1,0 +1,24 @@
+name: cameratraps-env
+channels:
+  - defaults
+dependencies:
+  - ipykernel
+  - opencv
+  - python=3.8
+  - numpy
+  - conda-forge::cudatoolkit=11.3
+  - pyyaml[version='>=5.3.1']
+  - matplotlib
+  - seaborn[version='>=0.11.0']
+  - conda-forge::cudnn=8.1
+  - nb_conda_kernels
+  - pandas
+  - tqdm
+  - pytorch::torchvision=0.11.2
+  - jsonpickle
+  - requests
+  - pytorch::pytorch=1.10.1
+  - humanfriendly
+  - pillow=9.1.0
+  - gdown
+prefix: C:\Users\Hp\anaconda3\envs\cameratraps-env
