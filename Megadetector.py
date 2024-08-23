@@ -3,7 +3,7 @@ from dependencies import *
 def megadetector(img_dir, num_images):
     print("Megadetector model")
     log = {}
-    local_detector_path = os.path.join(os.getcwd(), r"MegaDetector\megadetector\detection\run_detector_batch.py")
+    local_detector_path = os.path.join(os.getcwd(), r"megadetector\detection\run_detector_batch.py")
     megadetector_path = os.path.join(os.getcwd(), "md_v5a.0.0.pt")
     output_file_name = "_".join(img_dir.split("\\")[-3:])
     json_dir = os.path.join(img_dir, f"{output_file_name}_megadetector.json")
